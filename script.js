@@ -10,7 +10,7 @@ const planetData = {
         dayLength: "176 Earth days",
         yearLength: "88 Earth days",
         research: "NASA's MESSENGER mission (2004-2015) provided detailed maps of Mercury's surface, revealing a heavily cratered world with evidence of past volcanic activity. The BepiColombo mission, launched in 2018, is currently en route to study Mercury's magnetic field and surface composition.",
-        texture: "radial-gradient(circle at 30% 30%, #8c7853, #6f5f42, #5a4e35)",
+        texture: "radial-gradient(circle at 60% 40%, #a0968a, #7d7269, #5d544b, #403830, #2d241e)",
         moons: []
     },
     venus: {
@@ -23,7 +23,7 @@ const planetData = {
         dayLength: "243 Earth days (retrograde)",
         yearLength: "225 Earth days",
         research: "Multiple missions have studied Venus, including the Soviet Venera program and NASA's Magellan orbiter. The Parker Solar Probe has provided new insights during its Venus flybys, and future missions like VERITAS and DAVINCI+ will further explore this mysterious world.",
-        texture: "radial-gradient(circle at 30% 30%, #ffb649, #e5a342, #cc8f2b)",
+        texture: "radial-gradient(circle at 65% 35%, #ffc649, #ffb830, #e5a342, #d4921a, #c2841a)",
         moons: []
     },
     earth: {
@@ -36,7 +36,7 @@ const planetData = {
         dayLength: "24 hours",
         yearLength: "365.25 days",
         research: "Earth is continuously studied through satellites, space stations, and ground-based observations. Current research focuses on climate change, biodiversity, and understanding Earth's systems to predict future changes and protect our planet's habitability.",
-        texture: "radial-gradient(circle at 30% 30%, #4a90e2, #2c5aa0, #1a3d6b)",
+        texture: "linear-gradient(135deg, #6bb6ff 0%, #4a90e2 20%, #2c5aa0 40%, #1a3d6b 60%, #0a1a2e 80%), radial-gradient(ellipse at 30% 20%, #228b22, #006400 30%, transparent 60%), radial-gradient(ellipse at 70% 70%, #228b22, #006400 25%, transparent 50%)",
         moons: [
             {
                 name: "The Moon",
@@ -58,7 +58,7 @@ const planetData = {
         dayLength: "24.6 hours",
         yearLength: "687 Earth days",
         research: "Mars is actively explored by rovers including Perseverance and Curiosity, along with orbiters like Mars Reconnaissance Orbiter. Current research focuses on finding signs of past or present life and preparing for future human missions.",
-        texture: "radial-gradient(circle at 30% 30%, #cd5c5c, #a0444e, #8b3a3a)",
+        texture: "linear-gradient(135deg, #cd5c5c 0%, #b04444 25%, #8b3333 50%, #722828 75%, #401818 100%), radial-gradient(ellipse at 20% 30%, #d2691e, transparent 40%), radial-gradient(ellipse at 80% 60%, #8b4513, transparent 30%)",
         moons: [
             {
                 name: "Phobos",
@@ -88,7 +88,7 @@ const planetData = {
         dayLength: "9.9 hours",
         yearLength: "12 Earth years",
         research: "The Juno mission is currently studying Jupiter's interior structure and magnetic field. Previous missions like Galileo and Voyager revealed Jupiter's complex moon system and atmospheric dynamics.",
-        texture: "linear-gradient(0deg, #d8ca9d 0%, #c9b037 25%, #8b4513 50%, #deb887 75%, #d8ca9d 100%)",
+        texture: "linear-gradient(0deg, #d8ca9d 0%, #c9b037 25%, #8b4513 50%, #deb887 75%, #d8ca9d 100%), radial-gradient(ellipse at 20% 40%, #8b4513, transparent 30%), radial-gradient(ellipse at 80% 20%, #deb887, transparent 25%)",
         moons: [
             {
                 name: "Io",
@@ -126,7 +126,7 @@ const planetData = {
         dayLength: "10.7 hours",
         yearLength: "29 Earth years",
         research: "The Cassini mission (1997-2017) provided detailed studies of Saturn's rings and moons. It discovered geysers on Enceladus and lakes of liquid methane on Titan, revolutionizing our understanding of the Saturn system.",
-        texture: "radial-gradient(circle at 30% 30%, #fad5a5, #deb887, #d2b48c)",
+        texture: "radial-gradient(circle at 60% 30%, #fad5a5, #deb887, #cdaa7d, #b8956b, #a67c52)",
         moons: [
             {
                 name: "Titan",
@@ -164,7 +164,7 @@ const planetData = {
         dayLength: "17.2 hours",
         yearLength: "84 Earth years",
         research: "Uranus was last visited by Voyager 2 in 1986. Future missions are being planned to study this mysterious ice giant, including its unusual magnetic field and extreme axial tilt.",
-        texture: "radial-gradient(circle at 30% 30%, #4fd0e7, #3bb0c4, #2e8b9e)",
+        texture: "radial-gradient(circle at 60% 35%, #4fd0e7, #3bb0c4, #2e8fa4, #236f83, #1a5c6b)",
         moons: [
             {
                 name: "Miranda",
@@ -202,7 +202,7 @@ const planetData = {
         dayLength: "16.1 hours",
         yearLength: "165 Earth years",
         research: "Like Uranus, Neptune was only visited once by Voyager 2 in 1989. Future missions are being planned to study the ice giants and their unique properties, including Neptune's intense magnetic field and dynamic atmosphere.",
-        texture: "radial-gradient(circle at 30% 30%, #4b70dd, #2e4bc6, #1e3a8a)",
+        texture: "radial-gradient(circle at 60% 35%, #4b70dd, #3d5bc6, #2e46b0, #1f3199, #142682)",
         moons: [
             {
                 name: "Triton",
@@ -219,26 +219,20 @@ const planetData = {
 // Scene management
 class SceneManager {
     constructor() {
-        this.currentScene = 'landing-page';
+        this.currentScene = 'main-content';
         this.scenes = {
-            'landing-page': document.getElementById('landing-page'),
-            'solar-system': document.getElementById('solar-system'),
-            'planet-detail': document.getElementById('planet-detail'),
+            'main-content': document.getElementById('main-content'),
             'moon-detail': document.getElementById('moon-detail')
         };
         this.overlay = document.getElementById('overlay');
-        this.currentPlanet = null;
+        this.currentPlanet = 'mercury'; // Start with Mercury
         this.currentMoon = null;
         
         this.initializeEventListeners();
+        this.showPlanetDetail('mercury'); // Show Mercury initially
     }
     
     initializeEventListeners() {
-        // Sun click to enter solar system
-        document.getElementById('sun').addEventListener('click', () => {
-            this.transitionTo('solar-system');
-        });
-        
         // Planet navigation clicks
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -247,28 +241,16 @@ class SceneManager {
             });
         });
         
-        // Planet clicks in solar system
-        document.querySelectorAll('.planet').forEach(planet => {
-            planet.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const planetName = e.currentTarget.dataset.planet;
-                this.showPlanetDetail(planetName);
-            });
-        });
-        
-        // Overlay click to go back
+        // Overlay click to go back from moon detail
         this.overlay.addEventListener('click', () => {
             if (this.currentScene === 'moon-detail') {
-                this.transitionTo('planet-detail');
-            } else if (this.currentScene === 'planet-detail') {
-                this.transitionTo('solar-system');
-                this.clearPlanetSelection();
+                this.transitionTo('main-content');
             }
         });
         
         // Escape key to go back
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
+            if (e.key === 'Escape' && this.currentScene === 'moon-detail') {
                 this.overlay.click();
             }
         });
@@ -301,32 +283,8 @@ class SceneManager {
         // Add active class to selected planet
         document.querySelector(`[data-planet="${planetName}"]`).classList.add('active');
         
-        // Scroll/animate to planet
-        this.animateToPlanet(planetName);
-    }
-    
-    animateToPlanet(planetName) {
-        const targetPlanet = document.querySelector(`.solar-system-container .planet[data-planet="${planetName}"]`);
-        const container = document.querySelector('.solar-system-container');
-        
-        if (targetPlanet && container) {
-            const containerRect = container.getBoundingClientRect();
-            const planetRect = targetPlanet.getBoundingClientRect();
-            
-            // Calculate offset to center the planet
-            const offsetX = (containerRect.width / 2) - (planetRect.left - containerRect.left) - (planetRect.width / 2);
-            const offsetY = (containerRect.height / 2) - (planetRect.top - containerRect.top) - (planetRect.height / 2);
-            
-            // Apply transform
-            container.style.transform = `translate(${offsetX}px, ${offsetY}px) scale(1.2)`;
-            container.style.transition = 'transform 1s ease-in-out';
-            
-            // Reset after animation
-            setTimeout(() => {
-                container.style.transform = '';
-                container.style.transition = '';
-            }, 2000);
-        }
+        // Show the planet detail
+        this.showPlanetDetail(planetName);
     }
     
     showPlanetDetail(planetName) {
@@ -350,11 +308,11 @@ class SceneManager {
         const detailPlanet = document.getElementById('detail-planet-sphere');
         detailPlanet.style.background = planet.texture;
         
+        // Add rings for Saturn and Uranus
+        this.createPlanetRings(planetName);
+        
         // Create moons in detail view
         this.createDetailMoons(planet.moons);
-        
-        // Transition to detail view
-        this.transitionTo('planet-detail');
     }
     
     createDetailMoons(moons) {
@@ -386,6 +344,24 @@ class SceneManager {
         });
     }
     
+    createPlanetRings(planetName) {
+        const planetContainer = document.getElementById('detail-planet');
+        
+        // Remove any existing rings
+        const existingRings = planetContainer.querySelectorAll('.rings, .uranus-rings');
+        existingRings.forEach(ring => ring.remove());
+        
+        if (planetName === 'saturn') {
+            const rings = document.createElement('div');
+            rings.className = 'rings';
+            planetContainer.appendChild(rings);
+        } else if (planetName === 'uranus') {
+            const rings = document.createElement('div');
+            rings.className = 'uranus-rings';
+            planetContainer.appendChild(rings);
+        }
+    }
+    
     showMoonDetail(moon) {
         this.currentMoon = moon;
         
@@ -405,13 +381,7 @@ class SceneManager {
         this.transitionTo('moon-detail');
     }
     
-    clearPlanetSelection() {
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
-        this.currentPlanet = null;
-        this.currentMoon = null;
-    }
+
 }
 
 // Particle system for background stars

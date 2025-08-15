@@ -10,7 +10,7 @@ const planetData = {
         dayLength: "176 Earth days",
         yearLength: "88 Earth days",
         research: "NASA's MESSENGER mission (2004-2015) provided detailed maps of Mercury's surface, revealing a heavily cratered world with evidence of past volcanic activity. The BepiColombo mission, launched in 2018, is currently en route to study Mercury's magnetic field and surface composition.",
-        texture: "radial-gradient(circle at 30% 30%, #8c7853, #6f5f42, #5a4e35)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_mercury.jpg')",
         moons: []
     },
     venus: {
@@ -23,7 +23,7 @@ const planetData = {
         dayLength: "243 Earth days (retrograde)",
         yearLength: "225 Earth days",
         research: "Multiple missions have studied Venus, including the Soviet Venera program and NASA's Magellan orbiter. The Parker Solar Probe has provided new insights during its Venus flybys, and future missions like VERITAS and DAVINCI+ will further explore this mysterious world.",
-        texture: "radial-gradient(circle at 30% 30%, #ffb649, #e5a342, #cc8f2b)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_venus_surface.jpg')",
         moons: []
     },
     earth: {
@@ -36,7 +36,7 @@ const planetData = {
         dayLength: "24 hours",
         yearLength: "365.25 days",
         research: "Earth is continuously studied through satellites, space stations, and ground-based observations. Current research focuses on climate change, biodiversity, and understanding Earth's systems to predict future changes and protect our planet's habitability.",
-        texture: "radial-gradient(circle at 30% 30%, #4a90e2, #2c5aa0, #1a3d6b)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_earth_daymap.jpg')",
         moons: [
             {
                 name: "The Moon",
@@ -58,7 +58,7 @@ const planetData = {
         dayLength: "24.6 hours",
         yearLength: "687 Earth days",
         research: "Mars is actively explored by rovers including Perseverance and Curiosity, along with orbiters like Mars Reconnaissance Orbiter. Current research focuses on finding signs of past or present life and preparing for future human missions.",
-        texture: "radial-gradient(circle at 30% 30%, #cd5c5c, #a0444e, #8b3a3a)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_mars.jpg')",
         moons: [
             {
                 name: "Phobos",
@@ -88,7 +88,7 @@ const planetData = {
         dayLength: "9.9 hours",
         yearLength: "12 Earth years",
         research: "The Juno mission is currently studying Jupiter's interior structure and magnetic field. Previous missions like Galileo and Voyager revealed Jupiter's complex moon system and atmospheric dynamics.",
-        texture: "linear-gradient(0deg, #d8ca9d 0%, #c9b037 25%, #8b4513 50%, #deb887 75%, #d8ca9d 100%)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_jupiter.jpg')",
         moons: [
             {
                 name: "Io",
@@ -126,7 +126,7 @@ const planetData = {
         dayLength: "10.7 hours",
         yearLength: "29 Earth years",
         research: "The Cassini mission (1997-2017) provided detailed studies of Saturn's rings and moons. It discovered geysers on Enceladus and lakes of liquid methane on Titan, revolutionizing our understanding of the Saturn system.",
-        texture: "radial-gradient(circle at 30% 30%, #fad5a5, #deb887, #d2b48c)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_saturn.jpg')",
         moons: [
             {
                 name: "Titan",
@@ -164,7 +164,7 @@ const planetData = {
         dayLength: "17.2 hours",
         yearLength: "84 Earth years",
         research: "Uranus was last visited by Voyager 2 in 1986. Future missions are being planned to study this mysterious ice giant, including its unusual magnetic field and extreme axial tilt.",
-        texture: "radial-gradient(circle at 30% 30%, #4fd0e7, #3bb0c4, #2e8b9e)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_uranus.jpg')",
         moons: [
             {
                 name: "Miranda",
@@ -202,7 +202,7 @@ const planetData = {
         dayLength: "16.1 hours",
         yearLength: "165 Earth years",
         research: "Like Uranus, Neptune was only visited once by Voyager 2 in 1989. Future missions are being planned to study the ice giants and their unique properties, including Neptune's intense magnetic field and dynamic atmosphere.",
-        texture: "radial-gradient(circle at 30% 30%, #4b70dd, #2e4bc6, #1e3a8a)",
+        texture: "url('https://www.solarsystemscope.com/textures/download/2k_neptune.jpg')",
         moons: [
             {
                 name: "Triton",
@@ -222,7 +222,7 @@ class SceneManager {
         this.currentScene = 'landing-page';
         this.scenes = {
             'landing-page': document.getElementById('landing-page'),
-            'solar-system': document.getElementById('solar-system'),
+            'main-view': document.getElementById('main-view'),
             'planet-detail': document.getElementById('planet-detail'),
             'moon-detail': document.getElementById('moon-detail')
         };
@@ -234,9 +234,9 @@ class SceneManager {
     }
     
     initializeEventListeners() {
-        // Sun click to enter solar system
+        // Sun click to enter main view
         document.getElementById('sun').addEventListener('click', () => {
-            this.transitionTo('solar-system');
+            this.transitionTo('main-view');
         });
         
         // Planet navigation clicks
@@ -247,7 +247,7 @@ class SceneManager {
             });
         });
         
-        // Planet clicks in solar system
+        // Planet clicks in main view
         document.querySelectorAll('.planet').forEach(planet => {
             planet.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -261,7 +261,7 @@ class SceneManager {
             if (this.currentScene === 'moon-detail') {
                 this.transitionTo('planet-detail');
             } else if (this.currentScene === 'planet-detail') {
-                this.transitionTo('solar-system');
+                this.transitionTo('main-view');
                 this.clearPlanetSelection();
             }
         });
@@ -306,8 +306,8 @@ class SceneManager {
     }
     
     animateToPlanet(planetName) {
-        const targetPlanet = document.querySelector(`.solar-system-container .planet[data-planet="${planetName}"]`);
-        const container = document.querySelector('.solar-system-container');
+        const targetPlanet = document.querySelector(`.planets-container .planet[data-planet="${planetName}"]`);
+        const container = document.querySelector('.planets-container');
         
         if (targetPlanet && container) {
             const containerRect = container.getBoundingClientRect();
@@ -348,7 +348,10 @@ class SceneManager {
         
         // Set planet visual
         const detailPlanet = document.getElementById('detail-planet-sphere');
-        detailPlanet.style.background = planet.texture;
+        detailPlanet.style.backgroundImage = planet.texture;
+        detailPlanet.style.backgroundSize = 'cover';
+        detailPlanet.style.backgroundPosition = 'center';
+        detailPlanet.style.backgroundRepeat = 'no-repeat';
         
         // Create moons in detail view
         this.createDetailMoons(planet.moons);

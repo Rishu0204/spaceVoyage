@@ -7,9 +7,65 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Planet Navigation Bar - Always visible -->
-    <nav class="planet-navbar">
-        <div class="nav-item active" data-planet="mercury">
+    <!-- Initial Landing Page with Title and Sun -->
+    <div id="landing-page" class="scene active">
+        <div class="floating-title">SPACE VOYAGE</div>
+        <div class="sun-container">
+            <div class="sun" id="sun-trigger"></div>
+        </div>
+    </div>
+
+    <!-- Planet Overview Screen - Shows all planets with Earth centered -->
+    <div id="planet-overview" class="scene">
+        <div class="overview-container">
+            <div class="planets-grid">
+                <div class="planet-item" data-planet="mercury">
+                    <div class="planet-sphere mercury"></div>
+                    <div class="planet-name">Mercury</div>
+                    <div class="planet-brief">Closest to the Sun, extreme temperatures</div>
+                </div>
+                <div class="planet-item" data-planet="venus">
+                    <div class="planet-sphere venus"></div>
+                    <div class="planet-name">Venus</div>
+                    <div class="planet-brief">Hottest planet, thick toxic atmosphere</div>
+                </div>
+                <div class="planet-item earth-center" data-planet="earth">
+                    <div class="planet-sphere earth"></div>
+                    <div class="planet-name">Earth</div>
+                    <div class="planet-brief">Our blue home, only known planet with life</div>
+                </div>
+                <div class="planet-item" data-planet="mars">
+                    <div class="planet-sphere mars"></div>
+                    <div class="planet-name">Mars</div>
+                    <div class="planet-brief">The Red Planet, potential for life</div>
+                </div>
+                <div class="planet-item" data-planet="jupiter">
+                    <div class="planet-sphere jupiter"></div>
+                    <div class="planet-name">Jupiter</div>
+                    <div class="planet-brief">Largest planet, gas giant protector</div>
+                </div>
+                <div class="planet-item" data-planet="saturn">
+                    <div class="planet-sphere saturn"></div>
+                    <div class="planet-name">Saturn</div>
+                    <div class="planet-brief">Beautiful rings, hexagonal storms</div>
+                </div>
+                <div class="planet-item" data-planet="uranus">
+                    <div class="planet-sphere uranus"></div>
+                    <div class="planet-name">Uranus</div>
+                    <div class="planet-brief">Ice giant, rotates on its side</div>
+                </div>
+                <div class="planet-item" data-planet="neptune">
+                    <div class="planet-sphere neptune"></div>
+                    <div class="planet-name">Neptune</div>
+                    <div class="planet-brief">Windiest planet, deep blue color</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Planet Navigation Bar - Hidden initially -->
+    <nav class="planet-navbar" id="planet-navbar" style="opacity: 0; visibility: hidden;">
+        <div class="nav-item" data-planet="mercury">
             <div class="nav-planet mercury"></div>
             <span>Mercury</span>
         </div>
@@ -44,7 +100,7 @@
     </nav>
 
     <!-- Main Content - Planet Detail View -->
-    <div id="main-content" class="scene active">
+    <div id="main-content" class="scene">
         <div class="detail-container">
             <div class="planet-display">
                 <div class="detail-planet" id="detail-planet">

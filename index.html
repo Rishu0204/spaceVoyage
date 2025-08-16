@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Voyage</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 </head>
 <body>
     <!-- Initial Landing Page with Title and Sun -->
@@ -64,48 +64,9 @@
         </div>
     </div>
 
-    <!-- View Toggle Button -->
-    <div class="view-toggle" id="view-toggle" style="opacity: 0; visibility: hidden;">
-        <button id="toggle-3d" class="toggle-btn">
-            <span id="toggle-text">Switch to 3D View</span>
-        </button>
-    </div>
 
-    <!-- Planet Navigation Bar - Hidden initially -->
-    <nav class="planet-navbar" id="planet-navbar" style="opacity: 0; visibility: hidden;">
-        <div class="nav-item" data-planet="mercury">
-            <div class="nav-planet mercury"></div>
-            <span>Mercury</span>
-        </div>
-        <div class="nav-item" data-planet="venus">
-            <div class="nav-planet venus"></div>
-            <span>Venus</span>
-        </div>
-        <div class="nav-item" data-planet="earth">
-            <div class="nav-planet earth"></div>
-            <span>Earth</span>
-        </div>
-        <div class="nav-item" data-planet="mars">
-            <div class="nav-planet mars"></div>
-            <span>Mars</span>
-        </div>
-        <div class="nav-item" data-planet="jupiter">
-            <div class="nav-planet jupiter"></div>
-            <span>Jupiter</span>
-        </div>
-        <div class="nav-item" data-planet="saturn">
-            <div class="nav-planet saturn"></div>
-            <span>Saturn</span>
-        </div>
-        <div class="nav-item" data-planet="uranus">
-            <div class="nav-planet uranus"></div>
-            <span>Uranus</span>
-        </div>
-        <div class="nav-item" data-planet="neptune">
-            <div class="nav-planet neptune"></div>
-            <span>Neptune</span>
-        </div>
-    </nav>
+
+
 
     <!-- Main Content - Planet Detail View -->
     <div id="main-content" class="scene">
@@ -113,7 +74,7 @@
             <div class="planet-display">
                 <div class="detail-planet" id="detail-planet">
                     <div class="planet-sphere" id="detail-planet-sphere"></div>
-                    <canvas id="threejs-canvas" style="display: none;"></canvas>
+
                     <div class="moons-container" id="detail-moons"></div>
                 </div>
             </div>

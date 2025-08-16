@@ -225,17 +225,13 @@ class SceneManager {
         this.currentScene = 'landing-page';
         this.scenes = {
             'landing-page': document.getElementById('landing-page'),
-            'planet-overview': document.getElementById('planet-overview'),
             'main-content': document.getElementById('main-content'),
             'moon-detail': document.getElementById('moon-detail')
         };
         this.overlay = document.getElementById('overlay');
         this.navbar = document.getElementById('planet-navbar');
-        this.viewToggle = document.getElementById('view-toggle');
         this.currentPlanet = null;
         this.currentMoon = null;
-        this.is3DMode = false;
-        this.threejsRenderer = new ThreeJSPlanetRenderer();
         
         this.initializeEventListeners();
     }
@@ -249,14 +245,6 @@ class SceneManager {
             });
         }
         
-        // Planet overview clicks
-        document.querySelectorAll('.planet-item').forEach(item => {
-            item.addEventListener('click', (e) => {
-                const planet = e.currentTarget.dataset.planet;
-                this.selectPlanet(planet);
-            });
-        });
-        
         // Planet navigation clicks
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
@@ -265,6 +253,8 @@ class SceneManager {
             });
         });
         
+
+        
         // Overlay click to go back from moon detail
         this.overlay.addEventListener('click', () => {
             if (this.currentScene === 'moon-detail') {
@@ -272,13 +262,7 @@ class SceneManager {
             }
         });
         
-        // 3D View toggle
-        const toggleButton = document.getElementById('toggle-3d');
-        if (toggleButton) {
-            toggleButton.addEventListener('click', () => {
-                this.toggle3DView();
-            });
-        }
+
         
         // Escape key to go back
         document.addEventListener('keydown', (e) => {
@@ -286,8 +270,6 @@ class SceneManager {
                 if (this.currentScene === 'moon-detail') {
                     this.overlay.click();
                 } else if (this.currentScene === 'main-content') {
-                    this.transitionTo('planet-overview');
-                } else if (this.currentScene === 'planet-overview') {
                     this.transitionTo('landing-page');
                     this.hideNavbar();
                 }
@@ -295,12 +277,13 @@ class SceneManager {
         });
     }
     
-    startSpaceVoyage() {
-        this.transitionTo('planet-overview');
+        startSpaceVoyage() {
         this.showNavbar();
+        this.selectPlanet('earth'); // Default to Earth
     }
     
-    showNavbar() {
+
+       showNavbar() {
         this.navbar.style.opacity = '1';
         this.navbar.style.visibility = 'visible';
     }
@@ -309,7 +292,7 @@ class SceneManager {
         this.navbar.style.opacity = '0';
         this.navbar.style.visibility = 'hidden';
     }
-    
+ 
     transitionTo(sceneId) {
         // Hide current scene
         this.scenes[this.currentScene].classList.remove('active');
@@ -334,7 +317,7 @@ class SceneManager {
         }, 300);
     }
     
-    selectPlanet(planetName) {
+        selectPlanet(planetName) {
         // Remove active class from all nav items
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
@@ -348,7 +331,6 @@ class SceneManager {
         
         // Show the planet detail
         this.showPlanetDetail(planetName);
-        this.showViewToggle();
         this.transitionTo('main-content');
     }
     
@@ -373,14 +355,8 @@ class SceneManager {
         const detailPlanet = document.getElementById('detail-planet-sphere');
         detailPlanet.style.background = planet.texture;
         
-        // Update 3D view if active
-        if (this.is3DMode) {
-            detailPlanet.style.display = 'none';
-            this.threejsRenderer.show(planetName);
-        } else {
-            detailPlanet.style.display = 'block';
-            this.threejsRenderer.hide();
-        }
+        // Always show the 2D planet view
+        detailPlanet.style.display = 'block';
         
         // Add rings for Saturn and Uranus
         this.createPlanetRings(planetName);
@@ -465,234 +441,10 @@ class SceneManager {
         this.transitionTo('moon-detail');
     }
     
-    toggle3DView() {
-        this.is3DMode = !this.is3DMode;
-        const toggleText = document.getElementById('toggle-text');
-        const planetSphere = document.getElementById('detail-planet-sphere');
-        
-        if (this.is3DMode) {
-            // Switch to 3D view
-            toggleText.textContent = 'Switch to 2D View';
-            planetSphere.style.display = 'none';
-            
-            if (this.currentPlanet) {
-                this.threejsRenderer.show(this.currentPlanet);
-            }
-        } else {
-            // Switch to 2D view
-            toggleText.textContent = 'Switch to 3D View';
-            planetSphere.style.display = 'block';
-            this.threejsRenderer.hide();
-        }
-    }
-    
-    showViewToggle() {
-        if (this.viewToggle) {
-            this.viewToggle.style.opacity = '1';
-            this.viewToggle.style.visibility = 'visible';
-        }
-    }
-    
-    hideViewToggle() {
-        if (this.viewToggle) {
-            this.viewToggle.style.opacity = '0';
-            this.viewToggle.style.visibility = 'hidden';
-        }
-    }
+
 }
 
-// Three.js 3D Planet Renderer
-class ThreeJSPlanetRenderer {
-    constructor() {
-        this.scene = null;
-        this.camera = null;
-        this.renderer = null;
-        this.planet = null;
-        this.moons = [];
-        this.animationId = null;
-        this.canvas = document.getElementById('threejs-canvas');
-        this.isActive = false;
-    }
-    
-    init() {
-        // Scene setup
-        this.scene = new THREE.Scene();
-        
-        // Camera setup
-        this.camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        this.camera.position.z = 3;
-        
-        // Renderer setup
-        this.renderer = new THREE.WebGLRenderer({ 
-            canvas: this.canvas, 
-            alpha: true,
-            antialias: true 
-        });
-        this.renderer.setSize(400, 400);
-        this.renderer.setClearColor(0x000000, 0);
-        
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0x404040, 0.4);
-        this.scene.add(ambientLight);
-        
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-        directionalLight.position.set(5, 5, 5);
-        this.scene.add(directionalLight);
-    }
-    
-    createPlanet(planetName) {
-        // Clear existing planet
-        if (this.planet) {
-            this.scene.remove(this.planet);
-        }
-        this.clearMoons();
-        
-        // Create planet geometry
-        const geometry = new THREE.SphereGeometry(1, 64, 64);
-        
-        // Load texture
-        const loader = new THREE.TextureLoader();
-        const texture = loader.load(`texture/${this.getTextureFileName(planetName)}`);
-        
-        // Create material
-        const material = new THREE.MeshPhongMaterial({ 
-            map: texture,
-            shininess: planetName === 'earth' ? 100 : 30,
-            specular: planetName === 'earth' ? 0x111111 : 0x000000
-        });
-        
-        // Create planet mesh
-        this.planet = new THREE.Mesh(geometry, material);
-        this.scene.add(this.planet);
-        
-        // Add rings for Saturn
-        if (planetName === 'saturn') {
-            this.addRings();
-        }
-        
-        // Add moons
-        this.addMoons(planetName);
-    }
-    
-    getTextureFileName(planetName) {
-        const textureMap = {
-            'mercury': 'mercury.jpg',
-            'venus': 'venus.jpg',
-            'earth': 'earth_daymap.jpg',
-            'mars': 'mars.jpg',
-            'jupiter': 'jupiter.jpg',
-            'saturn': 'saturn.jpg',
-            'uranus': 'uranus.jpg',
-            'neptune': 'neptune.jpg'
-        };
-        return textureMap[planetName] || 'earth_daymap.jpg';
-    }
-    
-    addRings() {
-        const ringGeometry = new THREE.RingGeometry(1.5, 2.5, 64);
-        const loader = new THREE.TextureLoader();
-        const ringTexture = loader.load('texture/saturn_ring_alpha');
-        
-        const ringMaterial = new THREE.MeshBasicMaterial({
-            map: ringTexture,
-            side: THREE.DoubleSide,
-            transparent: true,
-            opacity: 0.8
-        });
-        
-        const rings = new THREE.Mesh(ringGeometry, ringMaterial);
-        rings.rotation.x = Math.PI / 2;
-        this.planet.add(rings);
-    }
-    
-    addMoons(planetName) {
-        const planetData = window.planetData || {};
-        const planet = planetData[planetName];
-        
-        if (planet && planet.moons && planet.moons.length > 0) {
-            planet.moons.forEach((moonData, index) => {
-                const moonGeometry = new THREE.SphereGeometry(0.1, 32, 32);
-                const loader = new THREE.TextureLoader();
-                const moonTexture = loader.load('texture/moon.jpg');
-                
-                const moonMaterial = new THREE.MeshPhongMaterial({ map: moonTexture });
-                const moon = new THREE.Mesh(moonGeometry, moonMaterial);
-                
-                // Position moon in orbit
-                const distance = 2 + (index * 0.5);
-                const angle = (index * Math.PI * 2) / planet.moons.length;
-                moon.position.x = Math.cos(angle) * distance;
-                moon.position.y = Math.sin(angle) * distance;
-                
-                moon.userData = { 
-                    orbitalDistance: distance, 
-                    orbitalSpeed: 0.01 / (index + 1),
-                    initialAngle: angle,
-                    moonData: moonData
-                };
-                
-                this.scene.add(moon);
-                this.moons.push(moon);
-            });
-        }
-    }
-    
-    clearMoons() {
-        this.moons.forEach(moon => {
-            this.scene.remove(moon);
-        });
-        this.moons = [];
-    }
-    
-    animate() {
-        if (!this.isActive) return;
-        
-        this.animationId = requestAnimationFrame(() => this.animate());
-        
-        // Rotate planet
-        if (this.planet) {
-            this.planet.rotation.y += 0.005;
-        }
-        
-        // Animate moons
-        this.moons.forEach(moon => {
-            const userData = moon.userData;
-            const time = Date.now() * userData.orbitalSpeed;
-            const angle = userData.initialAngle + time;
-            
-            moon.position.x = Math.cos(angle) * userData.orbitalDistance;
-            moon.position.y = Math.sin(angle) * userData.orbitalDistance;
-            moon.rotation.y += 0.01;
-        });
-        
-        this.renderer.render(this.scene, this.camera);
-    }
-    
-    show(planetName) {
-        if (!this.scene) {
-            this.init();
-        }
-        
-        this.createPlanet(planetName);
-        this.canvas.style.display = 'block';
-        this.isActive = true;
-        this.animate();
-    }
-    
-    hide() {
-        this.canvas.style.display = 'none';
-        this.isActive = false;
-        if (this.animationId) {
-            cancelAnimationFrame(this.animationId);
-        }
-    }
-    
-    resize() {
-        if (this.renderer) {
-            this.renderer.setSize(400, 400);
-        }
-    }
-}
+
 
 // Particle system for background stars
 class StarField {
@@ -985,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const addVisualEffects = () => {
         // Add glow effect to active elements
         const style = document.createElement('style');
-        style.textContent = `
+                style.textContent = `
             .nav-item.active {
                 box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
             }

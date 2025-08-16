@@ -97,82 +97,7 @@ body {
     }
 }
 
-/* Planet Overview Screen */
-#planet-overview {
-    background: radial-gradient(ellipse at center bottom, #1a1a2e 0%, #000 70%);
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 50px;
-}
 
-.overview-container {
-    width: 100%;
-    max-width: 1400px;
-}
-
-.planets-grid {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    gap: 40px;
-    flex-wrap: wrap;
-}
-
-.planet-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    opacity: 0;
-    animation: planetRollUp 1s ease-out forwards;
-}
-
-@keyframes planetRollUp {
-    from {
-        opacity: 0;
-        transform: translateY(100px) scale(0.5);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.planet-item:nth-child(1) { animation-delay: 0.1s; }
-.planet-item:nth-child(2) { animation-delay: 0.2s; }
-.planet-item:nth-child(3) { animation-delay: 0.3s; }
-.planet-item:nth-child(4) { animation-delay: 0.4s; }
-.planet-item:nth-child(5) { animation-delay: 0.5s; }
-.planet-item:nth-child(6) { animation-delay: 0.6s; }
-.planet-item:nth-child(7) { animation-delay: 0.7s; }
-.planet-item:nth-child(8) { animation-delay: 0.8s; }
-
-.planet-item:hover {
-    transform: scale(1.1);
-    filter: brightness(1.3) drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
-}
-
-.planet-item.earth-center {
-    order: 0;
-    transform: scale(1.2);
-}
-
-.planet-item .planet-sphere {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 15px;
-    box-shadow: 
-        inset -8px -8px 15px rgba(0, 0, 0, 0.6),
-        0 0 20px rgba(255, 255, 255, 0.1);
-}
-
-.planet-item.earth-center .planet-sphere {
-    width: 100px;
-    height: 100px;
-}
 
 .planet-name {
     font-size: 1.2rem;
@@ -225,44 +150,7 @@ body {
                 radial-gradient(circle at 35% 25%, #4b70dd, #3d5bc6, #2e46b0, #1f3199); /* Neptune texture with fallback */
 }
 
-/* View Toggle Button */
-.view-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 1000;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
 
-.toggle-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 600;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.toggle-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.5);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-}
-
-.toggle-btn:active {
-    transform: translateY(0);
-}
-
-#threejs-canvas {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-}
 
 /* Planet Navigation Bar - Floating and Blurred */
 .planet-navbar {
@@ -736,15 +624,7 @@ body {
         height: 150px;
     }
     
-    .planet-item .planet-sphere {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .planet-item.earth-center .planet-sphere {
-        width: 80px;
-        height: 80px;
-    }
+
     
     .detail-planet .planet-sphere, .detail-moon .moon-sphere {
         width: 200px;
@@ -792,19 +672,7 @@ body {
         font-size: 0.55rem;
     }
     
-    .planets-grid {
-        gap: 25px;
-    }
-    
-    .planet-item .planet-sphere {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .planet-item.earth-center .planet-sphere {
-        width: 70px;
-        height: 70px;
-    }
+
     
     .detail-container {
         flex-direction: column;
@@ -848,19 +716,7 @@ body {
         height: 100px;
     }
     
-    .planets-grid {
-        gap: 15px;
-    }
-    
-    .planet-item .planet-sphere {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .planet-item.earth-center .planet-sphere {
-        width: 55px;
-        height: 55px;
-    }
+
     
     .planet-name {
         font-size: 1rem;

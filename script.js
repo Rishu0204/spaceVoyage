@@ -225,11 +225,11 @@ class SceneManager {
         this.currentScene = 'landing-page';
         this.scenes = {
             'landing-page': document.getElementById('landing-page'),
-            'planet-overview': document.getElementById('planet-overview'),
             'main-content': document.getElementById('main-content'),
             'moon-detail': document.getElementById('moon-detail')
         };
         this.overlay = document.getElementById('overlay');
+        this.navbar = document.getElementById('planet-navbar');
         this.currentPlanet = null;
         this.currentMoon = null;
         
@@ -245,8 +245,8 @@ class SceneManager {
             });
         }
         
-        // Planet overview clicks
-        document.querySelectorAll('.planet-item').forEach(item => {
+        // Planet navigation clicks
+        document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', (e) => {
                 const planet = e.currentTarget.dataset.planet;
                 this.selectPlanet(planet);
@@ -270,22 +270,29 @@ class SceneManager {
                 if (this.currentScene === 'moon-detail') {
                     this.overlay.click();
                 } else if (this.currentScene === 'main-content') {
-                    this.transitionTo('planet-overview');
-                } else if (this.currentScene === 'planet-overview') {
                     this.transitionTo('landing-page');
-
+                    this.hideNavbar();
                 }
             }
         });
     }
     
-    startSpaceVoyage() {
-        this.transitionTo('planet-overview');
-
+        startSpaceVoyage() {
+        this.showNavbar();
+        this.selectPlanet('earth'); // Default to Earth
     }
     
 
+       showNavbar() {
+        this.navbar.style.opacity = '1';
+        this.navbar.style.visibility = 'visible';
+    }
     
+    hideNavbar() {
+        this.navbar.style.opacity = '0';
+        this.navbar.style.visibility = 'hidden';
+    }
+ 
     transitionTo(sceneId) {
         // Hide current scene
         this.scenes[this.currentScene].classList.remove('active');
@@ -310,8 +317,17 @@ class SceneManager {
         }, 300);
     }
     
-    selectPlanet(planetName) {
-
+        selectPlanet(planetName) {
+        // Remove active class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        
+        // Add active class to selected planet
+        const navItem = document.querySelector(`[data-planet="${planetName}"]`);
+        if (navItem && navItem.classList.contains('nav-item')) {
+            navItem.classList.add('active');
+        }
         
         // Show the planet detail
         this.showPlanetDetail(planetName);
@@ -588,7 +604,7 @@ class MobileEnhancer {
     }
     
     addTouchSupport() {
-        document.querySelectorAll('.planet, .moon, .sun, .planet-item').forEach(element => {
+        document.querySelectorAll('.planet, .moon, .nav-item, .sun, .planet-item').forEach(element => {
             element.addEventListener('touchstart', (e) => {
                 e.preventDefault();
                 element.style.transform = element.style.transform.includes('scale') ? 
@@ -721,8 +737,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const addVisualEffects = () => {
         // Add glow effect to active elements
         const style = document.createElement('style');
-        style.textContent = `
-
+                style.textContent = `
+            .nav-item.active {
+                box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            }
             
             .planet:hover, .planet-item:hover {
                 filter: brightness(1.2) drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
